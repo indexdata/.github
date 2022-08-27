@@ -3,11 +3,16 @@
 # new versions of a module with the tenant.  If that is needed,  it should be done manually
 # via the Okapi API. 
 
+# K8S_NAMESPACE: string; The Kubernetes namespace.
+#  'harvester-dev'
+# K8S_DEPLOYMENT: string: The module version to deploy.
+#  'mod-harvester-admin-0-1-0-snapshot'
+
 name: k8s-deploy-latest
 
 env:
-  K8S_NAMESPACE: 'harvester-dev'
-  K8S_DEPLOYMENT: 'mod-harvester-admin-0-1-0-snapshot'
+  K8S_NAMESPACE: -- replace: see notes above --
+  K8S_DEPLOYMENT: -- replace: see notes above --
 
 on:
   workflow_dispatch

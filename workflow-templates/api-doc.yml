@@ -2,9 +2,17 @@ name: api-doc
 
 # https://dev.folio.org/guides/api-doc/
 
+# API_TYPES: string: The space-separated list of types to consider. One or more of RAML OAS.
+#  'OAS'
+# API_DIRECTORIES: The space-separated list of directories to search for API description files.
+#  NOTE -- Also add each path to the "on: paths:" section.
+#  'src/main/resources/openapi'
+# API_EXCLUDES: The space-separated list of directories and files to exclude from traversal. Or an empty list.
+#  ''
+
 env:
-  API_TYPES: 'OAS'
-  API_DIRECTORIES: 'src/main/resources/openapi'
+  API_TYPES: -- replace: see notes above --
+  API_DIRECTORIES: -- replace: see notes above --
   API_EXCLUDES: ''
   OUTPUT_DIR: 'api-docs'
   AWS_S3_BUCKET: 'indexdata-docs'

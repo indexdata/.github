@@ -2,9 +2,15 @@ name: api-schema-lint
 
 # https://dev.folio.org/guides/describe-schema/
 
+# API_DIRECTORIES: The space-separated list of directories to search for JSON Schema files.
+#  NOTE -- Also add each path to the "on: paths:" section.
+#  'src/main/resources/openapi'
+# API_EXCLUDES: The space-separated list of directories and files to exclude from traversal. Or an empty list.
+#  ''
+
 env:
-  API_DIRECTORIES: 'src/main/resources/openapi'
-  API_EXCLUDES: 'example'
+  API_DIRECTORIES: -- replace: see notes above --
+  API_EXCLUDES: ''
 
 on:
   push:
