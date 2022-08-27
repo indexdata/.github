@@ -1,0 +1,4 @@
+{
+  "name": "build-maven",
+  "description": "Build a Maven-based module."
+}
