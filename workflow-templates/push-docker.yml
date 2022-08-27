@@ -1,0 +1,86 @@
+name: push-docker
+
+on:
+  schedule:
+    - cron: '15 01 * * 6'
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'  # i.e. release tag only
+  workflow_dispatch:
+
+env:
+  CONTAINER_REGISTRY: 'ghcr.io'
+  IMAGE_NAME_1: 'indexdata/harvester'
+  IMAGE_NAME_2: 'indexdata/harvester-admin'
+
+jobs:
+  push-docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Set up JDK 8
+        uses: actions/setup-java@v3
+        with:
+          java-version: '8'
+          distribution: 'temurin'
+          cache: maven
+      - name: Create Maven settings
+        uses: s4u/maven-settings-action@v2.6.0
+        with:
+          mirrors: |
+            [
+              {
+                "id": "id-maven-repo-https",
+                "name": "id-maven-repo via https",
+                "mirrorOf": "id-maven-repo",
+                "url": "https://maven.indexdata.com"
+              },
+              {
+                "id": "maven-restlet-https",
+                "name": "maven-restlet via https",
+                "mirrorOf": "maven-restlet",
+                "url": "https://maven.restlet.org"
+              }
+            ]
+      - name: Do Maven build harvester
+        run: mvn verify
+      - name: Log into GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.CONTAINER_REGISTRY }}
+          username: ${{ github.ACTOR }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract docker metadata for harvester
+        id: meta-1
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.CONTAINER_REGISTRY }}/${{ env.IMAGE_NAME_1 }}
+          labels: |
+            org.opencontainers.image.title=Harvester
+            org.opencontainers.image.description=Harvester server
+            org.opencontainers.image.vendor=Index Data LLC
+            org.opencontainers.image.documentation=https://github.com/indexdata/localindices/tree/master/doc
+      - name: Extract docker metadata for harvester-admin
+        id: meta-2
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.CONTAINER_REGISTRY }}/${{ env.IMAGE_NAME_2 }}
+          labels: |
+            org.opencontainers.image.title=Harvester Admin
+            org.opencontainers.image.description=Harvester administrative user interface
+            org.opencontainers.image.vendor=Index Data LLC
+      - name: Build and publish Docker for harvester
+        uses: docker/build-push-action@v3
+        with:
+          context: harvester
+          push: true
+          tags: ${{ steps.meta-1.outputs.tags }}
+          labels: ${{ steps.meta-1.outputs.labels }}
+      - name: Build and publish Docker for harvester-admin
+        uses: docker/build-push-action@v3
+        with:
+          context: harvester-admin
+          push: true
+          tags: ${{ steps.meta-2.outputs.tags }}
+          labels: ${{ steps.meta-2.outputs.labels }}

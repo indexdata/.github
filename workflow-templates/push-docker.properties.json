@@ -1,0 +1,4 @@
+{
+  "name": "push-docker",
+  "description": "Build a Maven-based module with old Java version, two docker images, additional maven https mirrors, push to GH Registry."
+}
