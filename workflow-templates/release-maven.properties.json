@@ -1,0 +1,4 @@
+{
+  "name": "release-maven",
+  "description": "Build and release a Maven-based module."
+}
