@@ -1,0 +1,4 @@
+{
+  "name": "k8s-deploy-latest",
+  "description": "Deploy the *latest* published container image that has the 'latest' tag."
+}
