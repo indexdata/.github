@@ -1,0 +1,4 @@
+{
+  "name": "api-lint",
+  "description": "Lint RAML and OpenAPI (OAS) descriptions."
+}
