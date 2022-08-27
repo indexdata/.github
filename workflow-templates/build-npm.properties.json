@@ -1,0 +1,4 @@
+{
+  "name": "build-npm",
+  "description": "Build an NPM-based module."
+}
