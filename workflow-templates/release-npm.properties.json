@@ -1,0 +1,4 @@
+{
+  "name": "release-npm",
+  "description": "Build and release an NPM-based module."
+}
