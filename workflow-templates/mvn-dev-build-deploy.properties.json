@@ -1,0 +1,4 @@
+{
+  "name": "mvn-dev-build-deploy",
+  "description": "ID-specific Maven workflow for iterative development"
+}
