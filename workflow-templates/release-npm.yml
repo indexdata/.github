@@ -2,15 +2,12 @@ name: release-npm
 
 # NODEJS_VERSION: string; The relevant Node.js version.
 #  '16'
+#
 # FOLIO_NPM_REGISTRY: string: The registry from which to get FOLIO and ReShare dependencies.
 #  'https://repository.folio.org/repository/npm-folioci/'
+#
 # FOLIO_MD_REGISTRY: The ModuleDescriptor registry to post MDs.
 #  'https://registry.folio-dev.indexdata.com'
-
-on:
-  push:
-    tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+'  # i.e. release tag only
 
 env:
   NODEJS_VERSION: '16'
@@ -19,6 +16,11 @@ env:
   OKAPI_PULL_FOLIO: '{ "urls" : [ "https://folio-registry.dev.folio.org" ] }'
   OKAPI_PULL_INDEXDATA: '{ "urls" : [ "https://registry.folio-dev.indexdata.com" ] }'
   COMPILE_TRANSLATION_FILES: true
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'  # i.e. release tag only
 
 jobs:
   release-npm:
@@ -80,7 +82,7 @@ jobs:
           path: ./module-descriptor.json
       - name: Login ModuleDescriptor registry
         id: login-md-registry
-        uses: indiesdev/curl@v1.1
+        uses: cyberman54/curl@v1
         with:
           url: "${{ env.FOLIO_MD_REGISTRY }}/authn/login"
           method: "POST"
@@ -112,7 +114,7 @@ jobs:
       - name: Docker registry logout
         run: docker logout https://docker.io/v2/
       - name: Pull FOLIO ModuleDescriptors to local Okapi
-        uses: indiesdev/curl@v1.1
+        uses: cyberman54/curl@v1
         with:
           url: "http://${{ env.OKAPI_IP }}:9130/_/proxy/pull/modules"
           method: "POST"
@@ -125,7 +127,7 @@ jobs:
             }
           body: ${{ env.OKAPI_PULL_FOLIO }}
       - name: Pull Index Data ModuleDescriptors to local Okapi
-        uses: indiesdev/curl@v1.1
+        uses: cyberman54/curl@v1
         with:
           url: "http://${{ env.OKAPI_IP }}:9130/_/proxy/pull/modules"
           method: "POST"
@@ -138,7 +140,7 @@ jobs:
             }
           body: ${{ env.OKAPI_PULL_INDEXDATA }}
       - name: Perform local Okapi dependency check
-        uses: indiesdev/curl@v1.1
+        uses: cyberman54/curl@v1
         with:
           url: "http://${{ env.OKAPI_IP }}:9130/_/proxy/modules?preRelease=false&npmSnapshot=false"
           method: "POST"
@@ -167,7 +169,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN_NPMJS }}
       - name: Publish ModuleDescriptor to MD registry
         id: result-md-registry
-        uses: indiesdev/curl@v1.1
+        uses: cyberman54/curl@v1
         with:
           url: "${{ env.FOLIO_MD_REGISTRY }}/_/proxy/modules"
           method: "POST"
