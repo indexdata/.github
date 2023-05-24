@@ -1,0 +1,4 @@
+{
+  "name": "sonarcloud-js",
+  "description": "Sonarcloud scanning for Nodejs-based projects."
+}
