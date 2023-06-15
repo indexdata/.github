@@ -7,7 +7,7 @@ on:
 jobs:
   bundle-deploy:
     env:
-      FOLIO_NPM_REGISTRY: 'https://repository.folio.org/repository/npm-folioci'
+      FOLIO_NPM_REGISTRY: 'https://repository.folio.org/repository/npm-folio'
       NODEJS_VERSION: '18'
       #STRIPES_TRANSPILE_TOKENS: '@indexdata'
 
