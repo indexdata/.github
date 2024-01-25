@@ -20,10 +20,10 @@ jobs:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
           submodules: recursive
 
-      - name: Set up JDK 11
+      - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
-          java-version: 11
+          java-version: 17
           distribution: 'temurin' # Alternative distribution options are available.
 
       - name: Gather some variables
@@ -78,7 +78,7 @@ jobs:
       - name: Login to dev Okapi instance
         if: ${{ env.CURRENT_BRANCH == env.PUBLISH_BRANCH }}
         id: login-okapi
-        uses: cyberman54/curl@master
+        uses: cyberman54/curl@v1.3
         with:
           url: "${{ env.OKAPI_URL }}/authn/login"
           method: "POST"
@@ -120,13 +120,13 @@ jobs:
         if: ${{ env.CURRENT_BRANCH == env.PUBLISH_BRANCH }}
         id: result-okapi
         # uses: indiesdev/curl@v1.1
-        uses: cyberman54/curl@master
+        uses: cyberman54/curl@v1.3
         with:
           url: "${{ env.OKAPI_URL }}/_/proxy/modules"
           method: "POST"
           accept: 201
           timeout: 10000
-          headers: | 
+          headers: |
             {
               "content-type": "application/json",
               "x-okapi-tenant": "supertenant",
