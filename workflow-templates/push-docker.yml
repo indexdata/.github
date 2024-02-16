@@ -32,7 +32,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Create Maven settings
-        uses: s4u/maven-settings-action@v2.8.0
+        uses: s4u/maven-settings-action@v3.0.0
         with:
           mirrors: |
             [
@@ -46,14 +46,14 @@ jobs:
       - name: Do Maven build harvester
         run: mvn verify
       - name: Log into GitHub Container Registry
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           registry: ${{ env.CONTAINER_REGISTRY }}
           username: ${{ github.ACTOR }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Extract docker metadata for harvester
         id: meta-1
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
           images: ${{ env.CONTAINER_REGISTRY }}/${{ env.IMAGE_NAME_1 }}
           labels: |
@@ -63,7 +63,7 @@ jobs:
             org.opencontainers.image.documentation=https://github.com/indexdata/localindices/tree/master/doc
       - name: Extract docker metadata for harvester-admin
         id: meta-2
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
           images: ${{ env.CONTAINER_REGISTRY }}/${{ env.IMAGE_NAME_2 }}
           labels: |
@@ -71,16 +71,18 @@ jobs:
             org.opencontainers.image.description=Harvester administrative user interface
             org.opencontainers.image.vendor=Index Data LLC
       - name: Build and publish Docker for harvester
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
-          context: harvester
+          context: .
           push: true
+          target: harvester
           tags: ${{ steps.meta-1.outputs.tags }}
           labels: ${{ steps.meta-1.outputs.labels }}
       - name: Build and publish Docker for harvester-admin
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
-          context: harvester-admin
+          context: .
           push: true
+          target: harvester-admin
           tags: ${{ steps.meta-2.outputs.tags }}
           labels: ${{ steps.meta-2.outputs.labels }}
