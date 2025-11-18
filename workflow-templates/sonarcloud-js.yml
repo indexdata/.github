@@ -9,6 +9,7 @@ on:
   push:
   pull_request:
     types: [opened, synchronize, reopened]
+  workflow_dispatch:
 
 jobs:
   sonarcloud-js:
@@ -20,7 +21,7 @@ jobs:
           fetch-depth: 0
 
       - name: Run Sonar scan
-        uses: sonarsource/sonarqube-scan-action@v5
+        uses: sonarsource/sonarqube-scan-action@v6
         with:
           args: >
             -Dsonar.organization=indexdata
