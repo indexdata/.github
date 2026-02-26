@@ -13,7 +13,7 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -25,7 +25,6 @@ jobs:
         with:
           node-version: ${{ env.NODEJS_VERSION }}
           check-latest: true
-          always-auth: true
 
       - name: Set yarn config for FOLIO modules
         run: yarn config set @folio:registry $FOLIO_NPM_REGISTRY
